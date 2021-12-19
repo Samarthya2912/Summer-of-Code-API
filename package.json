@@ -1,0 +1,29 @@
+{
+  "name": "summer-of-code-api",
+  "version": "1.0.0",
+  "description": "API for IOSD Summer of Code",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samarthya2912/Summer-of-Code-API.git"
+  },
+  "author": "iosd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Samarthya2912/Summer-of-Code-API/issues"
+  },
+  "homepage": "https://github.com/Samarthya2912/Summer-of-Code-API#readme",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "express": "^4.17.2",
+    "firebase": "^9.6.1",
+    "mongoose": "^6.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
