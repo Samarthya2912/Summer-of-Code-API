@@ -1,6 +1,13 @@
 const router = require("express").Router();
-const placesControllers = require("../Controllers/projects-controllers");
+const projectsContollers = require("../Controllers/projects-controllers");
+const { body } = require("express-validator");
 
-router.get("/", placesControllers.getProjects);
+router.get("/", projectsContollers.getProjects);
+router.post("/", [
+    body("repo").notEmpty(),
+    body("owner").notEmpty(),
+    body("description").notEmpty(),
+]
+, projectsContollers.createProject);
 
 module.exports = router;

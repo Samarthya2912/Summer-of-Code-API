@@ -19,7 +19,9 @@
   "homepage": "https://github.com/Samarthya2912/Summer-of-Code-API#readme",
   "dependencies": {
     "axios": "^0.24.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.2",
+    "express-validator": "^6.14.0",
     "firebase": "^9.6.1",
     "mongoose": "^6.1.2"
   },
