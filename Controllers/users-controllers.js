@@ -1,5 +1,20 @@
 const axios = require("axios");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv").config();
 const HttpError = require("../Models/http-error");
+
+async function getUser(req, res, next) {
+    const token = req.headers.authorization.split(" ")[1];
+    let payload = null;
+
+    try {
+        payload = jwt.verify(token, process.env.JWT_SECRET);
+    } catch(err) {
+        return next(new HttpError(err.message, 404));
+    }
+
+    res.json({ payload });
+}
 
 async function authenticateUser(req, res, next) {
   let access_token = null;
@@ -35,10 +50,14 @@ async function authenticateUser(req, res, next) {
 
       if(userData === null || userData === undefined) {
           return next(new HttpError("No user found.", 404))
-      } else return res.json({ userData })
+      } else {
+          const token = jwt.sign({ id: userData.id ,login: userData.login }, process.env.JWT_SECRET, { expiresIn: "1h" });
+          return res.json({ token, userData })
+      }
   } catch(err) {
       return next(new HttpError(err.message))
   }
 }
 
+exports.getUser = getUser;
 exports.authenticateUser = authenticateUser;

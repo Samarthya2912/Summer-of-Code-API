@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const dotenv = require("dotenv").config();
 const placesRoutes = require("./Routes/projects-routes");
 const usersRoutes = require("./Routes/user-routes");
@@ -7,6 +8,7 @@ const usersRoutes = require("./Routes/user-routes");
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cors());
 
 app.use("/api/projects", placesRoutes);
 app.use("/api/users", usersRoutes);
