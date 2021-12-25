@@ -25,7 +25,7 @@ const createProject = async(req, res, next) => {
     return next(new HttpError("Invalid inputs.", 422));
   }
 
-  const { repo, owner, description, keywords } = req.body;
+  const { repo, title, owner, description, keywords } = req.body;
 
   try {
     const response = await Project.find({ repo });
