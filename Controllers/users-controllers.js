@@ -2,6 +2,7 @@ const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 const HttpError = require("../Models/http-error");
+const User = require("../Models/user-model");
 
 async function getUser(req, res, next) {
     const token = req.headers.authorization.split(" ")[1];
@@ -13,7 +14,20 @@ async function getUser(req, res, next) {
         return next(new HttpError(err.message, 404));
     }
 
-    res.json({ payload });
+    let userData = null;
+    try {
+        const response = await axios({
+            method: "get",
+            url: `https://api.github.com/users/${payload.login}`
+        })
+        
+        userData = response.data;
+    } catch(err) {
+        return next(new HttpError(err.message));
+    }
+
+    if(!userData) return next(new HttpError("Invalid user", 404));
+    res.json({ userData });
 }
 
 async function authenticateUser(req, res, next) {
@@ -47,6 +61,15 @@ async function authenticateUser(req, res, next) {
       })
 
       userData = response.data;
+
+      const newUser = new User({
+        id: userData.id,
+        login: userData.login
+      });
+
+      const identifiedUser = await User.findOne({ id: userData.id, login: userData.login });
+
+      if(!identifiedUser) await newUser.save();
 
       if(userData === null || userData === undefined) {
           return next(new HttpError("No user found.", 404))
