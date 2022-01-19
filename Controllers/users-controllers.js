@@ -94,5 +94,5 @@ async function authenticateUser(req, res, next) {
   }
 }
 
-exports.getUser = getUser;
-exports.authenticateUser = authenticateUser;
+exports.getUser = getUser; // verifies the token and returns the userdata (id,login...)
+exports.authenticateUser = authenticateUser; // creates a github token and json web token for user and saves in db if user doesn't already exist
