@@ -1,10 +1,15 @@
 const axios = require("axios");
+const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 const HttpError = require("../Models/http-error");
 const User = require("../Models/user-model");
 
+/* verifies a jwt token and sends back user's github profile on success */
 async function getUser(req, res, next) {
+  const { errors } = validationResult(req);
+  if (errors.length) return next(new HttpError("Invalid inputs.", 422));
+
   const token = req.headers.authorization.split(" ")[1];
   let payload = null;
 
@@ -13,7 +18,6 @@ async function getUser(req, res, next) {
   } catch (err) {
     return next(new HttpError(err.message, 404));
   }
-  console.log("payload", payload);
 
   let userData = null;
   try {
@@ -31,7 +35,13 @@ async function getUser(req, res, next) {
   res.json({ userData });
 }
 
+/* creates a github token from the temporary github oauth code, once create, it encapsulates {github_id,login,github_token}
+in a jwt and sends back the same with id and login
+basically login/signup action */
 async function authenticateUser(req, res, next) {
+  const { errors } = validationResult(req);
+  if (errors.length) return next(new HttpError("Invalid inputs.", 422));
+
   let access_token = null;
   try {
     const response = await axios({
@@ -84,7 +94,11 @@ async function authenticateUser(req, res, next) {
     }
 
     const token = jwt.sign(
-      { id: userData.id, login: userData.login, github_access_token: access_token },
+      {
+        id: userData.id,
+        login: userData.login,
+        github_access_token: access_token,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );

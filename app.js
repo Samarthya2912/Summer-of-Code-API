@@ -27,8 +27,10 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(process.env.DB_URI)
-  .then(() => app.listen(5000, () => {
-    console.log("SERVER STARTED ON PORT 5000.")
-    cron.schedule(process.env.CRON_TIMER, test);
-  }))
+  .then(() =>
+    app.listen(5000, () => {
+      console.log("SERVER STARTED ON PORT 5000.");
+      cron.schedule("* * * * *", test);
+    })
+  )
   .catch((err) => console.log("Error: " + err.message));

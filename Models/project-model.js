@@ -10,7 +10,8 @@ const projectSchema = new mongoose.Schema({
   forks: { type: Number },
   open_issues: { type: Number },
   languages: { type: Object },
-  last_update: { type: Date }
+  last_update: { type: Date },
+  creator: { type: String, required: true }
 });
 
 module.exports = mongoose.model("Project", projectSchema);
