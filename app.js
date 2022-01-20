@@ -4,6 +4,8 @@ const cors = require("cors");
 const dotenv = require("dotenv").config();
 const placesRoutes = require("./Routes/projects-routes");
 const usersRoutes = require("./Routes/user-routes");
+const { test } = require("./Controllers/metric-update-controller");
+const cron = require("node-cron");
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -25,5 +27,10 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(process.env.DB_URI)
-  .then(() => app.listen(5000, () => console.log("SERVER STARTED ON PORT 5000.")))
+  .then(() =>
+    app.listen(5000, () => {
+      console.log("SERVER STARTED ON PORT 5000.");
+      cron.schedule("* * * * *", test);
+    })
+  )
   .catch((err) => console.log("Error: " + err.message));
