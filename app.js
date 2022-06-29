@@ -28,8 +28,8 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(process.env.DB_URI)
   .then(() =>
-    app.listen(5000, () => {
-      console.log("SERVER STARTED ON PORT 5000.");
+    app.listen(process.env.PORT, () => {
+      console.log(`SERVER STARTED ON PORT ${process.env.PORT}.`);
       cron.schedule("* * * * *", test);
     })
   )
